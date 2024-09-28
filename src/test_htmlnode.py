@@ -1,22 +1,21 @@
 #
 
 import unittest
-from textnode import TextNode
 from htmlnode import HTMLNode
 
 
 test_cases = [
     {
         'obj_params': [
-            "a",
             "Test case #1: test object tag & value",
+            "a",
         ],
-        'expected': ["a", "Test case #1: test object tag & value", [], {}],
+        'expected': ["Test case #1: test object tag & value", "a", None, None],
     },
     {
         'obj_params': [
-            "p",
             "Test case #2: props_to_html",
+            "p",
             [],
             {"href": "https://www.google.com", "target": "_blank",},
         ],
@@ -24,10 +23,10 @@ test_cases = [
     },
     {
         'obj_params': [
-            "h1",
             "Test case #3: test __repr__",
+            "h1",
         ],
-        'expected': "tag: h1\nvalue: Test case #3: test __repr__\nchildren: []\nprops: {}",
+        'expected': "value: Test case #3: test __repr__\ntag: h1\nchildren: None\nprops: None",
     },
 ]
 
@@ -36,7 +35,7 @@ class TestHTMLNode(unittest.TestCase):
     def test_object_params_(self):
         # Test that object has correct object params
         test_node = HTMLNode(*test_cases[0]['obj_params'])
-        test_node_1_params = [test_node.tag, test_node.value, test_node.children, test_node.props]
+        test_node_1_params = [test_node.value, test_node.tag, test_node.children, test_node.props]
         self.assertEqual(test_node_1_params, test_cases[0]['expected'], f"Failed: {test_node.value}")
 
     def test_repr_(self):
