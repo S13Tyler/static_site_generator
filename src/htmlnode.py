@@ -21,7 +21,7 @@ class HTMLNode():
         self.props = props
 
     def __repr__(self):
-        return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, {self.props})"
+        return f"HTMLNode({self.tag}, {self.value}, children: {self.children}, props: {self.props})"
 
     def to_html(self):
         raise NotImplementedError("Function: to_html() not implemented. Try on child variant.")
@@ -44,6 +44,23 @@ class HTMLNode():
         if self.props:
             return f"<{self.tag} {self.props_to_html()}>{content}</{self.tag}>"
         return f"<{self.tag}>{content}</{self.tag}>"
+
+    def textnode_to_htmlnode(text_node):
+        match(text_node.text_type):
+            case "text":
+                return LeafNode(None, text_node.text, None)
+            case "bold":
+                return LeafNode("b", text_node.text, None)
+            case "italic":
+                return LeafNode("i", text_node.text, None)
+            case "code":
+                return LeafNode("code", text_node.text, None)
+            case "link":
+                return LeafNode("a", text_node.text, {"href": text_node.url})
+            case "image":
+                return LeafNode("img", None, {"src": text_node.url, "alt": text_node.text})
+        raise Exception("Invalid HTML (type: TextNode) -> Invalid 'type'")
+
 
 
 class LeafNode(HTMLNode):

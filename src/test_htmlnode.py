@@ -2,6 +2,7 @@
 
 import unittest
 from htmlnode import HTMLNode, LeafNode, ParentNode
+from textnode import TextNode
 
 
 
@@ -28,7 +29,7 @@ class TestHTMLNode(unittest.TestCase):
             "Test case #3: test __repr__"
         )
         self.assertEqual(
-            repr(test_node),
+            test_node.__repr__(),
             "HTMLNode(h1, Test case #3: test __repr__, children: None, props: None)",
             "Failed: htmlnode_repr"
         )
@@ -46,6 +47,68 @@ class TestHTMLNode(unittest.TestCase):
             "href=\"https://www.google.com\" target=\"_blank\"",
             "Failed: htmlnode_tohtml_wprops"
         )
+
+    def test_textnode_to_htmlnode_text(self):
+        text_node = TextNode("I'm a TextNode of type: text", "text")
+        expected = LeafNode(None, "I'm a TextNode of type: text")
+        self.assertEqual(
+            HTMLNode.textnode_to_htmlnode(text_node).__repr__(),
+            expected.__repr__(),
+            "Failed: textnode_to_htmlnode_text"
+        )
+
+    def test_textnode_to_htmlnode_bold(self):
+        text_node = TextNode("I'm a TextNode of type: bold", "bold")
+        expected = LeafNode("b", "I'm a TextNode of type: bold")
+        self.assertEqual(
+            HTMLNode.textnode_to_htmlnode(text_node).__repr__(),
+            expected.__repr__(),
+            "Failed: textnode_to_htmlnode_bold"
+        )
+
+    def test_textnode_to_htmlnode_italic(self):
+        text_node = TextNode("I'm a TextNode of type: italic", "italic")
+        expected = LeafNode("i", "I'm a TextNode of type: italic")
+        self.assertEqual(
+            HTMLNode.textnode_to_htmlnode(text_node).__repr__(),
+            expected.__repr__(),
+            "Failed: textnode_to_htmlnode_italic"
+        )
+
+    def test_textnode_to_htmlnode_code(self):
+        text_node = TextNode("I'm a TextNode of type: code", "code")
+        expected = LeafNode("code", "I'm a TextNode of type: code")
+        self.assertEqual(
+            HTMLNode.textnode_to_htmlnode(text_node).__repr__(),
+            expected.__repr__(),
+            "Failed: textnode_to_htmlnode_code"
+        )
+
+    def test_textnode_to_htmlnode_link(self):
+        text_node = TextNode("I'm a TextNode of type: link", "link", "https://www.google.com/")
+        expected = LeafNode("a", "I'm a TextNode of type: link", {"href": "https://www.google.com/"})
+        self.assertEqual(
+            HTMLNode.textnode_to_htmlnode(text_node).__repr__(),
+            expected.__repr__(),
+            "Failed: textnode_to_htmlnode_link"
+        )
+
+    def test_textnode_to_htmlnode_image(self):
+        text_node = TextNode("I'm a TextNode of type: image", "image", "https://www.google.com/")
+        expected = LeafNode("img", None, {"src": "https://www.google.com/", "alt": "I'm a TextNode of type: image"})
+        self.assertEqual(
+            HTMLNode.textnode_to_htmlnode(text_node).__repr__(),
+            expected.__repr__(),
+            "Failed: textnode_to_htmlnode_image"
+        )
+
+    def test_textnode_to_htmlnode_none(self):
+        text_node = TextNode("I'm a TextNode of type: none", "none")
+        with self.assertRaises(Exception):
+            HTMLNode.textnode_to_htmlnode(text_node)
+
+
+
 
 
     #
@@ -128,6 +191,7 @@ class TestHTMLNode(unittest.TestCase):
             "<h2><b>Bold text</b>Normal text<i>italic text</i>Normal text</h2>",
             "Failed: parentnode_headings"
         )
+
 
 if __name__ == "__main__":
     unittest.main(1)
